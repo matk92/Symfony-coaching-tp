@@ -16,28 +16,22 @@ class ProgramRepository extends ServiceEntityRepository
         parent::__construct($registry, Program::class);
     }
 
-    //    /**
-    //     * @return Program[] Returns an array of Program objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return Program[] Returns an array of Program objects
+     */
+    public function findBySearchAndFilter(?string $search, ?string $filter): array
+    {
+        $qb = $this->createQueryBuilder('p');
 
-    //    public function findOneBySomeField($value): ?Program
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($search) {
+            $qb->andWhere('p.name LIKE :search OR p.description LIKE :search')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($filter) {
+            // Ajoutez des conditions de filtre ici si nécessaire
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

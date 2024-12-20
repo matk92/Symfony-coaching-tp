@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des clients{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Liste des clients</h1>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="btn btn-success" href="{{ path('app_customer_new') }}">Créer nouveau</a>
+        {% endif %}
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for customer in customers %}
+            <tr>
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.firstName }}</td>
+                <td>{{ customer.lastName }}</td>
+                <td>{{ customer.email }}</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('app_customer_show', {'id': customer.id}) }}">Voir</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-secondary btn-sm" href="{{ path('app_customer_edit', {'id': customer.id}) }}">Modifier</a>
+                        {{ include('customer/_delete_form.html.twig') }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

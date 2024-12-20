@@ -27,7 +27,7 @@ class Coach
     /**
      * @var Collection<int, Program>
      */
-    #[ORM\OneToMany(targetEntity: Program::class, mappedBy: 'coach')]
+    #[ORM\OneToMany(targetEntity: Program::class, mappedBy: 'coach', cascade: ['remove'])]
     private Collection $programs;
 
     public function __construct()

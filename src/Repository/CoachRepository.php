@@ -16,28 +16,22 @@ class CoachRepository extends ServiceEntityRepository
         parent::__construct($registry, Coach::class);
     }
 
-    //    /**
-    //     * @return Coach[] Returns an array of Coach objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return Coach[] Returns an array of Coach objects
+     */
+    public function findBySearchAndFilter(?string $search, ?string $filter): array
+    {
+        $qb = $this->createQueryBuilder('c');
 
-    //    public function findOneBySomeField($value): ?Coach
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($search) {
+            $qb->andWhere('c.firstName LIKE :search OR c.lastName LIKE :search')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($filter) {
+            // Ajoutez des conditions de filtre ici si nécessaire
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

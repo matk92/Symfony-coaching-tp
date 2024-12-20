@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Bienvenue sur CoachApp!</h1>
+        <hr class="my-4">
+        <p>Utilisez les boutons ci-dessous pour naviguer dans l'application.</p>
+        <a class="btn btn-primary btn-lg" href="{{ path('app_coach_index') }}" role="button">Voir les coachs</a>
+        <a class="btn btn-secondary btn-lg" href="{{ path('app_program_index') }}" role="button">Voir les programmes</a>
+        <a class="btn btn-success btn-lg" href="{{ path('app_session_index') }}" role="button">Voir les sessions</a>
+    </div>
+
+    <div class="container mt-5">
+        <h2>Comptes de test</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Rôle</th>
+                    <th>Email</th>
+                    <th>Mot de passe</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Utilisateur</td>
+                    <td>
+                        <span id="user-email">user@example.com</span>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard('user-email')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <span id="user-password">userpassword</span>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard('user-password')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Administrateur</td>
+                    <td>
+                        <span id="admin-email">admin@example.com</span>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard('admin-email')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <span id="admin-password">adminpassword</span>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard('admin-password')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Banni</td>
+                    <td>
+                        <span id="banned-email">banned@example.com</span>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard('banned-email')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <span id="banned-password">bannedpassword</span>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard('banned-password')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="copy-notification" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; bottom: 1rem; right: 1rem; display: none; z-index: 1050;">
+        <div class="d-flex">
+            <div class="toast-body">
+                Texte copié dans le presse-papiers.
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            var copyText = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(copyText).then(function() {
+                var toastElement = document.getElementById('copy-notification');
+                toastElement.style.display = 'block';
+                var toast = new bootstrap.Toast(toastElement);
+                toast.show();
+            }, function(err) {
+                console.error('Erreur lors de la copie : ', err);
+            });
+        }
+    </script>
+{% endblock %}

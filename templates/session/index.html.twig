@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des sessions{% endblock %}
+
+{% block body %}
+    <h1>Liste des sessions</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Programme</th>
+                <th>Coach</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for session in sessions %}
+            <tr>
+                <td>{{ session.id }}</td>
+                <td>{{ session.date ? session.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ session.program.name }}</td>
+                <td>{{ session.program.coach.firstName }} {{ session.program.coach.lastName }}</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{ path('app_session_show', {'id': session.id}) }}">Voir</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-secondary btn-sm" href="{{ path('app_session_edit', {'id': session.id}) }}">Modifier</a>
+                        {{ include('session/_delete_form.html.twig') }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="btn btn-success" href="{{ path('app_session_new') }}">Créer nouveau</a>
+    {% endif %}
+{% endblock %}

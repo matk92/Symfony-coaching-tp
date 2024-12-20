@@ -30,8 +30,8 @@ class AppFixtures extends Fixture
 
         $coach2 = new Coach();
         $coach2->setFirstName('Alice');
-        $coach2->setLastName('Johnson');
-        $coach2->setEmail('alice.johnson@example.com');
+        $coach2->setLastName('Johson');
+        $coach2->setEmail('alice.johson@example.com');
         $manager->persist($coach2);
 
         // Create Programs
@@ -43,8 +43,8 @@ class AppFixtures extends Fixture
         $manager->persist($program1);
 
         $program2 = new Program();
-        $program2->setName('Advanced Yoga');
-        $program2->setDescription('An advanced yoga program.');
+        $program2->setName('Advanced Tennis');
+        $program2->setDescription('An advanced tennis program.');
         $program2->setDuration(60);
         $program2->setCoach($coach2);
         $manager->persist($program2);
@@ -65,6 +65,31 @@ class AppFixtures extends Fixture
         $customer2->setPassword($this->passwordHasher->hashPassword($customer2, 'password'));
         $customer2->setRoles(['ROLE_USER']);
         $manager->persist($customer2);
+
+        // Create test accounts
+        $user = new Customer();
+        $user->setFirstName('Test');
+        $user->setLastName('User');
+        $user->setEmail('user@example.com');
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'userpassword'));
+        $user->setRoles(['ROLE_USER']);
+        $manager->persist($user);
+
+        $admin = new Customer();
+        $admin->setFirstName('Test');
+        $admin->setLastName('Admin');
+        $admin->setEmail('admin@example.com');
+        $admin->setPassword($this->passwordHasher->hashPassword($admin, 'adminpassword'));
+        $admin->setRoles(['ROLE_ADMIN']);
+        $manager->persist($admin);
+
+        $banned = new Customer();
+        $banned->setFirstName('Test');
+        $banned->setLastName('Banned');
+        $banned->setEmail('banned@example.com');
+        $banned->setPassword($this->passwordHasher->hashPassword($banned, 'bannedpassword'));
+        $banned->setRoles(['ROLE_BANNED']);
+        $manager->persist($banned);
 
         // Create Sessions
         $session1 = new Session();

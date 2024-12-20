@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
-class Customer
+class Customer implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,13 +31,16 @@ class Customer
     private ?string $password = null;
 
     #[ORM\Column(type: Types::ARRAY)]
-    private array $roles = [];
+    private array $roles = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_BANNED'];
 
     /**
      * @var Collection<int, Session>
      */
     #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'customer')]
     private Collection $sessions;
+
+    // Propriété transitoire pour le mot de passe en clair
+    private ?string $plainPassword = null;
 
     public function __construct()
     {
@@ -95,6 +100,18 @@ class Customer
         return $this;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
     public function getRoles(): array
     {
         return $this->roles;
@@ -135,5 +152,21 @@ class Customer
         }
 
         return $this;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->email;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }

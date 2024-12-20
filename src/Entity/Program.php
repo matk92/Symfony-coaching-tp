@@ -28,7 +28,7 @@ class Program
     /**
      * @var Collection<int, Session>
      */
-    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'program')]
+    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'program', cascade: ['remove'])]
     private Collection $sessions;
 
     #[ORM\ManyToOne(inversedBy: 'programs')]

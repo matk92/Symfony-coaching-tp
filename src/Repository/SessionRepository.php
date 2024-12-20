@@ -16,28 +16,30 @@ class SessionRepository extends ServiceEntityRepository
         parent::__construct($registry, Session::class);
     }
 
-    //    /**
-    //     * @return Session[] Returns an array of Session objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return Session[] Returns an array of Session objects
+     */
+    public function findBySearchAndFilter(?string $search, ?string $filter): array
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->join('s.program', 'p')
+            ->join('p.coach', 'c');
 
-    //    public function findOneBySomeField($value): ?Session
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($search) {
+            $qb->andWhere('p.name LIKE :search OR c.firstName LIKE :search OR c.lastName LIKE :search')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($filter) {
+            if ($filter === 'coach') {
+                $qb->andWhere('c.firstName LIKE :search OR c.lastName LIKE :search')
+                   ->setParameter('search', '%' . $search . '%');
+            } elseif ($filter === 'program') {
+                $qb->andWhere('p.name LIKE :search')
+                   ->setParameter('search', '%' . $search . '%');
+            }
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }
